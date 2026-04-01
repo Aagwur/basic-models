@@ -18,7 +18,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.impute import SimpleImputer
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_validate, StratifiedKFold
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -81,6 +81,43 @@ model = Pipeline([
     ("preprocessor", preprocessor),
     ("clf", LogisticRegression(max_iter=1000))
 ])
+
+# %%
+# cross-validation, important to do before training
+
+cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_STATE)
+
+scoring = {
+    "accuracy": "accuracy",
+    "precision": "precision",
+    "recall": "recall",
+    "roc_auc": "roc_auc",
+}
+
+cv_results = cross_validate(
+    estimator=model,
+    X=X_train,
+    y=y_train,
+    cv=cv,
+    scoring=scoring,
+    n_jobs=-1,
+    return_train_score=True,
+)
+
+print("CV accuracy:", cv_results["test_accuracy"])
+print("Mean CV accuracy:", cv_results["test_accuracy"].mean())
+
+print("CV precision:", cv_results["test_precision"])
+print("Mean CV precision:", cv_results["test_precision"].mean())
+
+print("CV recall:", cv_results["test_recall"])
+print("Mean CV recall:", cv_results["test_recall"].mean())
+
+print("CV ROC-AUC:", cv_results["test_roc_auc"])
+print("Mean CV ROC-AUC:", cv_results["test_roc_auc"].mean())
+
+print("Mean fit time:", cv_results["fit_time"].mean())
+print("Mean score time:", cv_results["score_time"].mean())
 
 # %%
 model.fit(X_train, y_train)
