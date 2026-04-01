@@ -123,8 +123,10 @@ print("Mean score time:", cv_results["score_time"].mean())
 model.fit(X_train, y_train)
 
 # %%
-y_pred = model.predict(X_test)
 y_prob = model.predict_proba(X_test)
+
+threshold = 0.3
+y_pred = (y_prob[:, 1] >= threshold).astype(int)
 
 # %%
 accuracy = accuracy_score(y_test, y_pred)
