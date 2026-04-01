@@ -23,7 +23,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, precision_score, recall_score, classification_report, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, precision_score, recall_score, classification_report, ConfusionMatrixDisplay, roc_curve
 
 # %%
 # constants
@@ -141,3 +141,13 @@ ConfusionMatrixDisplay.from_predictions(y_test, y_pred)
 plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.show()
+
+# %%
+plt.hist(y_prob[:, 1], bins=20, edgecolor="black")
+plt.xlabel("Probability of death")
+plt.ylabel("Patients")
+plt.show()
+
+# %%
+fpr, tpr, thresholds = roc_curve(y_test, y_prob[:, 1])
+plt.plot(fpr, tpr, thresholds)
