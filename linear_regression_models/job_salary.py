@@ -126,6 +126,7 @@ model = Pipeline([("preprocessor", preprocessor), ("regressor", LinearRegression
 
 # %%
 model.fit(X_train, y_train)
+None
 
 # %%
 y_pred = model.predict(X_test)

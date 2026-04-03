@@ -150,6 +150,7 @@ print("Mean score time:", cv_results["score_time"].mean())
 
 # %%
 model.fit(X_train, y_train)
+None
 
 # %%
 y_prob = model.predict_proba(X_test)
